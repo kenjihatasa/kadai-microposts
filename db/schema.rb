@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170419020433) do
+ActiveRecord::Schema.define(version: 20170420074004) do
+
+  create_table "favoriteships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "favorite_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["favorite_id"], name: "index_favoriteships_on_favorite_id", using: :btree
+    t.index ["user_id", "favorite_id"], name: "index_favoriteships_on_user_id_and_favorite_id", unique: true, using: :btree
+    t.index ["user_id"], name: "index_favoriteships_on_user_id", using: :btree
+  end
 
   create_table "microposts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "content"
@@ -36,9 +46,14 @@ ActiveRecord::Schema.define(version: 20170419020433) do
     t.string   "password_digest"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "micropost_id"
+    t.index ["micropost_id"], name: "index_users_on_micropost_id", using: :btree
   end
 
+  add_foreign_key "favoriteships", "microposts", column: "favorite_id"
+  add_foreign_key "favoriteships", "users"
   add_foreign_key "microposts", "users"
   add_foreign_key "relationships", "users"
   add_foreign_key "relationships", "users", column: "follow_id"
+  add_foreign_key "users", "microposts"
 end

@@ -19,7 +19,7 @@
     <div class="col-xs-8">
       
 <%= render 'microposts/microposts', microposts: @microposts, user: @user %>
-
+<%= link_to favoritings_user_path(@user) do %>Favorites <span class="badge"><%= @count_favoritings %></span><% end %></li>
     </div>
   </div>
 <% else %>
